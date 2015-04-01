@@ -4,7 +4,56 @@ use warnings;
 use base 'TAP::Base', 'TAP::Formatter::File';
 use accessors qw(sessions);
 
-# ABSTRACT: Diff friendly (ie sorted) TAP output.
+=head1 NAME
+
+TAP::Formatter::Diffable - Diff friendly (ie sorted) TAP output.
+
+=head1 SYNOPSIS
+
+  prove -j5 --formatter=TAP::Formatter::Diffable t
+
+=head1 DESCRIPTION
+
+Delays TAP output until the entire test suite has completed.
+
+Sorts test output by test filename.  This way tests alway display in the same order, even when processing in parallel.
+
+Skips over passing tests, unless they are marked as TODO.  These are skipped to make the diff easier to matchup when test numbers change slightly.
+
+Sorts the final "Test Results"
+
+
+
+=over
+
+=item Example Pass
+
+ All tests successful.
+ Files=1, Tests=1,
+ Result: PASS
+
+=item Example Fail
+
+ Failed test 'Example failred test'
+ #   at t/00-load.t line 6.
+ # Looks like you planned 1 test but ran 2.
+ # Looks like you failed 1 test of 2 run.
+ [t/00-load.t]
+ not ok 2 - Example failred test
+
+
+ Test Summary Report
+ -------------------
+ t/00-load.t (Wstat: 256 Tests: 2 Failed: 1)
+   Failed test:  2
+   Non-zero exit status: 1
+   Parse errors: Bad plan.  You planned 1 tests but ran 2.
+ Files=1, Tests=2,
+ Result: FAIL
+
+=back
+
+=cut
 
 use vars qw($VERSION);
 $VERSION = '0.15';
